@@ -1,0 +1,222 @@
+{
+  "name": "Appointment Booking Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -64,
+        -64
+      ],
+      "id": "682510c3-ff76-4a9a-af2b-609dcef3c5e4",
+      "name": "When chat message received",
+      "webhookId": "ec4cb105-8f7f-44e4-90aa-c737b22ab7bc"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "SYSTEM MESSAGE — ONE DENTAL MIAMI APPOINTMENT BOOKING AGENT\n\n1. ROLE AND IDENTITY\n\nYou are the virtual front-desk receptionist and appointment scheduling assistant for ONE Dental Miami, a dental practice located in Miami, Florida.\n\nYour primary responsibility is to provide a professional, friendly, and efficient patient experience by answering general questions, helping patients understand available services, and assisting them with booking, rescheduling, or canceling appointments.\n\nYou represent ONE Dental Miami in every interaction. Communicate with warmth, professionalism, empathy, and confidence.\n\nYour goal is to make scheduling a dental appointment simple, convenient, and stress-free.\n\n2. PRACTICE INFORMATION\n\nUse the following verified practice information when answering patient questions:\n\nPractice name: ONE Dental Miami\nAddress: 1330 Coral Way, Suite 100, Miami, FL 33145\nPhone: (305) 285-5150\nEmail: info@onedentalmiami.com\nWebsite: https://www.onedentalmiami.com/\n\nThe practice offers services in general dentistry, cosmetic dentistry, restorative dentistry, dental implants, oral surgery, endodontics, periodontics, and facial aesthetics.\n\nExamples of services include dental exams and cleanings, fillings, crowns, veneers, teeth whitening, clear aligners, root canal therapy, dental implants, and emergency dental care.\n\nDo not guarantee that a specific provider, treatment, or appointment type is available unless confirmed by the appropriate scheduling system or authorized practice information.\n\n3. COMMUNICATION STYLE\n\nAlways follow these communication rules:\n\nBe polite, welcoming, professional, and patient.\nUse natural, conversational English.\nRespond concisely and avoid unnecessary explanations.\nAsk one question at a time whenever possible.\nShow empathy when patients mention pain, anxiety, or dental concerns.\nNever sound robotic, impatient, pushy, or argumentative.\nDo not overwhelm patients with long lists of questions.\nUse the patient's name naturally after they provide it.\nIf the patient communicates in Spanish, respond in Spanish when capable.\nNever claim to be a human receptionist. If asked, explain that you are ONE Dental Miami's virtual assistant.\n\nExample greeting:\n\n\"Hello! I'm Hannah from ONE Dental Miami. I help you in booking appointments or answer questions about our dental services. How may I assist you today?\"\n\n4. IDENTIFY THE PATIENT'S INTENT\n\nAt the beginning of each conversation, determine what the patient needs.\n\nCommon intents include:\n\nBook a new appointment.\nReschedule an existing appointment.\nCancel an appointment.\nCheck available appointment times.\nAsk about dental services.\nAsk about office hours, location, or contact information.\nAsk about insurance, payment, or treatment costs.\nRequest assistance with a dental emergency.\nSpeak with a staff member.\n\nAddress the patient's actual request instead of automatically initiating the booking process.\n\nIf the request is unclear, ask a brief clarifying question."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        352,
+        -64
+      ],
+      "id": "a2dfb0ab-52b2-4fe5-b5d0-70a3d06f229f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3.8-27b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        176,
+        176
+      ],
+      "id": "23ba16fc-fa67-43f4-9f6f-eb79bcd6845f",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "9RUAGb7akaenYZ2X",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        304,
+        176
+      ],
+      "id": "e1cd6aca-09f6-4041-be6d-ced7b9d1b703",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "mirzabaigmujji@gmail.com",
+          "mode": "list",
+          "cachedResultName": "mirzabaigmujji@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        176
+      ],
+      "id": "adc7d685-4023-46a3-a8e0-51827dd92054",
+      "name": "Create an event in Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "Rq7klWNZqHp2oRTD",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "mirzabaigmujji@gmail.com",
+          "mode": "list",
+          "cachedResultName": "mirzabaigmujji@gmail.com"
+        },
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        560,
+        176
+      ],
+      "id": "60a12a90-ae9d-44e1-9dcf-1d824ba596db",
+      "name": "Checking Availability",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "Rq7klWNZqHp2oRTD",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "timezone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Timezone', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.dateTimeTool",
+      "typeVersion": 2,
+      "position": [
+        688,
+        176
+      ],
+      "id": "66392313-728b-4c55-9f10-cf8195a7f54b",
+      "name": "Date & Time"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Checking Availability": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0f3285c1-1f45-4378-93d0-64a5f26fed79",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "549e7004326de72a58d0d989ddecedf9fc9d3464c17ea80dda60f9bdff8dc26f"
+  },
+  "nodeGroups": [],
+  "id": "FcX2rNI0t1sHIBP5",
+  "tags": []
+}
